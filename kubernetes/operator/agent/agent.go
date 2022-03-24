@@ -154,7 +154,6 @@ func (a *Agent) Start() {
 	ctx, a.cancel = context.WithCancel(context.Background())
 	defer a.cancel()
 	// 定义基础
-	a.wg = sync.WaitGroup{}
 	defer a.wg.Wait()
 	// exporter协程后台运行
 	go a.general(a.Logs.WithName("general"), ctx)
@@ -166,7 +165,7 @@ func (a *Agent) Background() {
 }
 
 func (a *Agent) Stop() {
-	defer a.wg.Wait()
+	//defer a.wg.Wait()
 	a.cancel()
 }
 
@@ -174,5 +173,6 @@ func NewAgent() *Agent {
 	return &Agent{
 		ID:   uuid.New().String(),
 		Logs: ctrl.Log.WithName("agent"),
+		wg:   sync.WaitGroup{},
 	}
 }
